@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -58,7 +58,7 @@
         <button id="tab-student" class="active">Student</button>
         <button id="tab-staff">Staff</button>
       </div>
-      <label>Student ID</label>
+      <label id="login-id-label">Student ID</label>
       <input id="studentId" placeholder="Enter your student ID" value="" />
       <label>Password</label>
       <input id="password" type="password" placeholder="Enter your password" value="" />
@@ -72,8 +72,8 @@
       <div class="logo-title"><span class="brand-line"></span>
         <div class="auth-brand-stack"><h2>Taylor's University</h2><small>Unified&nbsp;&nbsp;E-Services Platform</small></div>
       </div>
-      <p class="subtitle">Enter verification code</p>
-      <p class="muted">We've sent a 6-digit code to your email</p>
+      <p id="otp-title" class="subtitle">Enter verification code</p>
+      <p id="otp-hint" class="muted">We've sent a 6-digit code to your email</p>
       <div class="otp-inputs">
         <input maxlength="1"/><input maxlength="1"/><input maxlength="1"/><input maxlength="1"/><input maxlength="1"/><input maxlength="1"/>
       </div>
@@ -94,14 +94,15 @@
         <div class="user-chip"><span class="notif">5</span><div class="avatar">O</div><div><b id="user-name">Officer Lim</b><small id="user-role">Administrator</small></div></div>
       </header>
       <div id="page-content" class="page"></div>
+      <div id="student-chat-root"></div>
     </main>
   </section>
 </div>
 
 <div id="modal" class="modal hidden">
   <div class="modal-card">
-    <h3 id="modal-title">操作确认</h3>
-    <p id="modal-body">演示交互：你可以继续告诉我这里应该接什么真实逻辑。</p>
+    <h3 id="modal-title">Action Confirmation</h3>
+    <p id="modal-body">Demo interaction. You can continue by describing the real business logic to connect.</p>
     <div class="modal-actions">
       <button id="modal-cancel" class="btn">Cancel</button>
       <button id="modal-ok" class="btn btn-primary">Confirm</button>
