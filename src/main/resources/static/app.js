@@ -9,6 +9,9 @@ const modal = document.getElementById('modal');
 const modalTitle = document.getElementById('modal-title');
 const modalBody = document.getElementById('modal-body');
 
+const USE_API_AUTH = false;
+const DEMO_OTP_CODE = '123456';
+
 const state = {
   role: 'student',
   pendingStudentId: '',
@@ -127,10 +130,16 @@ document.getElementById('login-btn').onclick = async () => {
 
   try {
     errorNode.textContent = '';
-    const data = await apiPost('/api/auth/login', { studentId: id, password: pass });
 
-    state.pendingStudentId = data.studentId || id;
-    document.getElementById('otp-hint').textContent = "We've sent a 6-digit code to your email";
+    if (USE_API_AUTH) {
+      const data = await apiPost('/api/auth/login', { studentId: id, password: pass });
+      state.pendingStudentId = data.studentId || id;
+      document.getElementById('otp-hint').textContent = "We've sent a 6-digit code to your email";
+    } else {
+      state.pendingStudentId = id;
+      document.getElementById('otp-hint').textContent = `We've sent a 6-digit code to your email. Demo OTP: ${DEMO_OTP_CODE}`;
+    }
+
     document.querySelectorAll('.otp-inputs input').forEach((input) => {
       input.value = '';
     });
@@ -161,18 +170,29 @@ document.getElementById('verify-btn').onclick = async () => {
 
   try {
     errorNode.textContent = '';
-    const data = await apiPost('/api/auth/login/verify-otp', {
-      studentId: state.pendingStudentId,
-      otp: code
-    });
 
-    if (data.accessToken) {
-      localStorage.setItem('accessToken', data.accessToken);
+    if (USE_API_AUTH) {
+      const data = await apiPost('/api/auth/login/verify-otp', {
+        studentId: state.pendingStudentId,
+        otp: code
+      });
+
+      if (data.accessToken) {
+        localStorage.setItem('accessToken', data.accessToken);
+      }
+      if (data.refreshToken) {
+        localStorage.setItem('refreshToken', data.refreshToken);
+      }
+      localStorage.setItem('studentId', state.pendingStudentId);
+    } else {
+      if (code != DEMO_OTP_CODE) {
+        throw new Error('Invalid OTP code. Use demo code 123456');
+      }
+      localStorage.setItem('studentId', state.pendingStudentId);
+      localStorage.setItem('accessToken', 'demo-access-token');
+      localStorage.setItem('refreshToken', 'demo-refresh-token');
     }
-    if (data.refreshToken) {
-      localStorage.setItem('refreshToken', data.refreshToken);
-    }
-    localStorage.setItem('studentId', state.pendingStudentId);
+
     openPortal();
   } catch (error) {
     errorNode.textContent = error.message;
@@ -188,8 +208,12 @@ document.getElementById('resend').onclick = async (event) => {
   }
 
   try {
-    const data = await apiPost('/api/auth/resend-otp', { studentId: state.pendingStudentId });
-    openModal('Resend OTP', data.message || 'OTP has been resent.');
+    if (USE_API_AUTH) {
+      const data = await apiPost('/api/auth/resend-otp', { studentId: state.pendingStudentId });
+      openModal('Resend OTP', data.message || 'OTP has been resent.');
+    } else {
+      openModal('Resend OTP', `Demo OTP resent. Use code ${DEMO_OTP_CODE}.`);
+    }
   } catch (error) {
     document.getElementById('otp-error').textContent = error.message;
   }
