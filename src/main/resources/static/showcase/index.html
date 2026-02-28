@@ -10,19 +10,42 @@
 <div id="app">
   <section id="landing" class="screen active hero-screen">
     <header class="hero-topbar">
-      <div class="brand"><span class="brand-line"></span>Taylor's University</div>
-      <nav>
-        <a href="#">About</a><a href="#">Features</a><a href="#">Contact</a><a id="go-login" href="#">Login</a>
+      <div class="hero-brand">
+        <span class="brand-line"></span>
+        <span class="brand-text">Taylor's University</span>
+      </div>
+      <nav class="hero-nav" aria-label="Main navigation">
+        <a href="#about">About</a>
+        <a href="#features">Features</a>
+        <a href="#contact">Contact</a>
+        <a id="go-login" class="login-link" href="#">
+          <span class="login-icon">↪</span>
+          <span>Login</span>
+        </a>
       </nav>
     </header>
-    <div class="hero-content">
-      <h1>Unified E-Services Platform for Taylor's University International Office</h1>
-      <p>Streamline your visa, documents, and appointments all in one secure portal.</p>
-      <div class="hero-actions">
-        <button class="btn btn-primary" data-role="student">Login as Student</button>
-        <button class="btn btn-dark" data-role="staff">Login as Staff</button>
-      </div>
-    </div>
+
+    <main class="hero-main">
+      <div class="hero-overlay"></div>
+      <section class="hero-copy" aria-labelledby="hero-heading">
+        <div class="hero-red-line"></div>
+        <h1 id="hero-heading">Unified E-Services Platform for Taylor's University International Office</h1>
+        <p>Streamline your visa, documents, and appointments all in one secure portal.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" data-role="student">Login as Student</button>
+          <button class="btn btn-dark" data-role="staff">Login as Staff</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="hero-footer">
+      <div>© 2025 Taylor's University | Unified&nbsp;&nbsp;E-Services Platform</div>
+      <nav aria-label="Footer navigation">
+        <a href="#privacy">Privacy Policy</a>
+        <a href="#terms">Terms of Use</a>
+        <a href="#support">Contact Support</a>
+      </nav>
+    </footer>
   </section>
 
   <section id="login" class="screen auth-screen">
