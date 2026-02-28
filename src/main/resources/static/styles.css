@@ -586,6 +586,7 @@
   display: flex;
   gap: 14px;
   align-items: center;
+  transform: translateY(2px);
 }
 
 .student-update-row strong {
@@ -644,17 +645,19 @@
   position: absolute;
   right: 0;
   bottom: 80px;
-  width: 360px;
+  width: 432px;
+  height: 560px;
   background: #ffffff;
   border: 1px solid #dfdfe4;
   border-radius: 18px;
   box-shadow: 0 16px 34px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   display: none;
+  flex-direction: column;
 }
 
 .student-chat-panel.open {
-  display: block;
+  display: flex;
 }
 
 .student-chat-panel header {
@@ -683,8 +686,8 @@
 }
 
 .student-chat-messages {
-  max-height: 320px;
-  min-height: 220px;
+  flex: 1;
+  min-height: 0;
   padding: 14px;
   overflow-y: auto;
   background: #ffffff;
