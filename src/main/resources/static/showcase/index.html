@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taylor's E-Services Showcase</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+<div id="app">
+  <section id="landing" class="screen active hero-screen">
+    <header class="hero-topbar">
+      <div class="brand"><span class="brand-line"></span>Taylor's University</div>
+      <nav>
+        <a href="#">About</a><a href="#">Features</a><a href="#">Contact</a><a id="go-login" href="#">Login</a>
+      </nav>
+    </header>
+    <div class="hero-content">
+      <h1>Unified E-Services Platform for Taylor's University International Office</h1>
+      <p>Streamline your visa, documents, and appointments all in one secure portal.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" data-role="student">Login as Student</button>
+        <button class="btn btn-dark" data-role="staff">Login as Staff</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="login" class="screen auth-screen">
+    <div class="auth-card">
+      <div class="logo-title"><span class="brand-line"></span>
+        <div><h2>Taylor's University</h2><small>Unified E-Services Platform</small></div>
+      </div>
+      <p class="subtitle">Login to access your portal</p>
+      <div class="segmented">
+        <button id="tab-student" class="active">Student</button>
+        <button id="tab-staff">Staff</button>
+      </div>
+      <label>Student ID</label>
+      <input id="studentId" placeholder="Enter your student ID" value="TP012345" />
+      <label>Password</label>
+      <input id="password" type="password" placeholder="Enter your password" value="123456" />
+      <button id="login-btn" class="btn btn-primary full">Login as Student</button>
+      <small id="login-error" class="error"></small>
+    </div>
+  </section>
+
+  <section id="otp" class="screen auth-screen">
+    <div class="auth-card otp-card">
+      <div class="logo-title"><span class="brand-line"></span>
+        <div><h2>Taylor's University</h2><small>Unified E-Services Platform</small></div>
+      </div>
+      <p class="subtitle">Enter verification code</p>
+      <p class="muted">We've sent a 6-digit code to your email</p>
+      <div class="otp-inputs">
+        <input maxlength="1"/><input maxlength="1"/><input maxlength="1"/><input maxlength="1"/><input maxlength="1"/><input maxlength="1"/>
+      </div>
+      <button id="verify-btn" class="btn btn-primary full">Verify Code</button>
+      <small class="muted">Didn't receive the code? <a href="#" id="resend">Resend</a></small>
+      <small id="otp-error" class="error"></small>
+    </div>
+  </section>
+
+  <section id="portal" class="screen portal-screen">
+    <aside class="sidebar">
+      <div class="sidebar-head"><span class="brand-line"></span><div><b>Taylor's University</b><small id="portal-type">Staff Portal</small></div></div>
+      <nav id="menu"></nav>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div><h2 id="portal-title">International Office Portal</h2><small id="portal-subtitle">Administrative Dashboard</small></div>
+        <div class="user-chip"><span class="notif">5</span><div class="avatar">O</div><div><b id="user-name">Officer Lim</b><small id="user-role">Administrator</small></div></div>
+      </header>
+      <div id="page-content" class="page"></div>
+    </main>
+  </section>
+</div>
+
+<div id="modal" class="modal hidden">
+  <div class="modal-card">
+    <h3 id="modal-title">操作确认</h3>
+    <p id="modal-body">演示交互：你可以继续告诉我这里应该接什么真实逻辑。</p>
+    <div class="modal-actions">
+      <button id="modal-cancel" class="btn">Cancel</button>
+      <button id="modal-ok" class="btn btn-primary">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script src="./app.js"></script>
+</body>
+</html>
