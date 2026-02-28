@@ -231,16 +231,21 @@
 
 .portal-screen.student-mode .sidebar-head b {
   display: block;
-  font-size: 40px;
+  font-size: 42px;
   line-height: 1.1;
   font-weight: 500;
   white-space: nowrap;
-  margin-bottom: 2px;
+  transform: scale(0.42);
+  transform-origin: left top;
+  margin-bottom: -6px;
 }
 
 .portal-screen.student-mode .sidebar-head small {
   color: #7a7a82;
-  font-size: 14px;
+  font-size: 28px;
+  transform: scale(0.5);
+  transform-origin: left top;
+  margin-left: -7px;
 }
 
 .portal-screen.student-mode .sidebar nav {
@@ -251,7 +256,7 @@
 }
 
 .portal-screen.student-mode .menu-item {
-  height: 48px;
+  height: 52px;
   border-radius: 12px;
   border: 0;
   background: transparent;
@@ -260,22 +265,22 @@
   align-items: center;
   gap: 12px;
   padding: 0 16px;
-  font-size: 30px;
-  transform: scale(0.46);
+  font-size: 34px;
+  transform: scale(0.52);
   transform-origin: left center;
-  width: 500px;
+  width: 470px;
 }
 
 .portal-screen.student-mode .menu-item .menu-icon {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   display: inline-grid;
   place-items: center;
 }
 
 .portal-screen.student-mode .menu-item .menu-icon .menu-svg {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   object-fit: contain;
 }
 
@@ -328,6 +333,7 @@
   position: relative;
   width: 24px;
   height: 24px;
+  margin-right: 2px;
   display: inline-grid;
   place-items: center;
 }
@@ -354,8 +360,8 @@
   font-size: 12px;
   padding: 0;
   position: absolute;
-  top: -10px;
-  right: -10px;
+  top: -8px;
+  right: -8px;
   z-index: 2;
 }
 
@@ -391,6 +397,7 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
   margin-bottom: 18px;
+  align-items: stretch;
 }
 
 .student-card {
@@ -398,6 +405,8 @@
   border: 1px solid #e0e0e5;
   border-radius: 18px;
   padding: 22px;
+  display: flex;
+  flex-direction: column;
 }
 
 .student-card header {
@@ -433,8 +442,8 @@
 
 .student-label {
   color: #6f6f74;
-  font-size: 31px;
-  transform: scale(0.46);
+  font-size: 34px;
+  transform: scale(0.50);
   transform-origin: left center;
   margin-left: -8px;
   white-space: nowrap;
@@ -444,8 +453,8 @@
 
 .student-meta {
   color: #6f6f74;
-  font-size: 31px;
-  transform: scale(0.46);
+  font-size: 34px;
+  transform: scale(0.50);
   transform-origin: left center;
   margin-left: -8px;
   white-space: nowrap;
@@ -486,14 +495,14 @@
 .student-secondary,
 .student-primary {
   width: 100%;
-  height: 50px;
-  border-radius: 12px;
+  height: 56px;
+  border-radius: 14px;
   border: 1px solid #d7d7dc;
   background: #ffffff;
-  font-size: 31px;
-  transform: scale(0.46);
+  font-size: 34px;
+  transform: scale(0.50);
   transform-origin: center center;
-  margin-top: 8px;
+  margin-top: auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -728,8 +737,20 @@
 
 .student-card > p {
   margin: 0;
-  font-size: 31px;
-  transform: scale(0.46);
+  font-size: 34px;
+  transform: scale(0.50);
   transform-origin: left center;
   margin-left: -8px;
+}
+
+.student-wide-card > .student-muted {
+  transform: none;
+  font-size: 34px;
+  line-height: 1.35;
+  margin: 0;
+  white-space: normal;
+}
+
+.student-wide-card > h3 {
+  margin-left: 0;
 }
