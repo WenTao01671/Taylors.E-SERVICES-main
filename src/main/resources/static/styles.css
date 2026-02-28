@@ -890,7 +890,7 @@
   align-items: start;
 }
 
-.student-visa-step:not(:last-child)::after {
+.student-visa-step::after {
   content: '';
   position: absolute;
   left: 11px;
@@ -900,7 +900,7 @@
   background: #cfd3da;
 }
 
-.student-visa-step.completed:not(:last-child)::after {
+.student-visa-step.completed::after {
   background: #16a34a;
 }
 
