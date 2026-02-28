@@ -312,7 +312,7 @@
 .portal-screen.student-mode .topbar h2 {
   margin: 0;
   font-size: 20px;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 1.2;
   transform: none;
 }
@@ -380,11 +380,12 @@
 }
 
 .portal-screen.student-mode #user-name {
-  font-size: 30px;
-  transform: scale(0.5);
-  transform-origin: left center;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.2;
+  transform: none;
   white-space: nowrap;
-  margin-left: -8px;
+  margin-left: 0;
 }
 
 .portal-screen.student-mode .page {
@@ -882,10 +883,25 @@
 }
 
 .student-visa-step {
+  position: relative;
   display: grid;
   grid-template-columns: 28px 1fr;
   gap: 14px;
   align-items: start;
+}
+
+.student-visa-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 30px;
+  width: 2px;
+  height: 96px;
+  background: #cfd3da;
+}
+
+.student-visa-step.completed:not(:last-child)::after {
+  background: #16a34a;
 }
 
 .student-visa-marker {
