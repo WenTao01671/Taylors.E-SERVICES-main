@@ -311,11 +311,10 @@
 
 .portal-screen.student-mode .topbar h2 {
   margin: 0;
-  font-size: 38px;
-  font-weight: 500;
-  transform: scale(0.44);
-  transform-origin: left center;
-  margin-left: -8px;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.2;
+  transform: none;
 }
 
 .portal-screen.student-mode .topbar small,
@@ -587,6 +586,21 @@
   display: flex;
   gap: 14px;
   align-items: center;
+}
+
+.student-update-row strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.student-update-row .student-muted {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.2;
 }
 
 .student-update-check {
