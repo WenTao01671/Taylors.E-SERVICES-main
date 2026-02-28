@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Services API Test Suite</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { margin-bottom: 10px; font-size: 2em; }
+        .nav-tabs { display: flex; background: #f8f9fa; border-bottom: 2px solid #e0e0e0; overflow-x: auto; position: sticky; top: 0; z-index: 100; }
+        .nav-tab { padding: 15px 25px; cursor: pointer; border: none; background: transparent; font-size: 14px; font-weight: 600; color: #666; transition: all 0.3s; white-space: nowrap; }
+        .nav-tab:hover { background: rgba(102, 126, 234, 0.1); color: #667eea; }
+        .nav-tab.active { background: white; color: #667eea; border-bottom: 3px solid #667eea; }
+        .content { padding: 30px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .section { margin-bottom: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea; }
+        .section h2 { margin-bottom: 10px; color: #333; font-size: 1.3em; }
+        .section h3 { margin: 20px 0 10px 0; color: #555; font-size: 1.1em; }
+        .endpoint-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; margin-right: 10px; }
+        .badge-post { background: #28a745; color: white; }
+        .badge-get { background: #007bff; color: white; }
+        .badge-put { background: #ffc107; color: #333; }
+        .badge-delete { background: #dc3545; color: white; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: #555; font-size: 14px; }
+        input[type="text"], input[type="password"], input[type="email"], input[type="number"], select, textarea { width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 14px; transition: border-color 0.3s; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #667eea; }
+        input[type="file"] { width: 100%; padding: 10px; border: 2px dashed #667eea; border-radius: 6px; background: #f0f4ff; cursor: pointer; }
+        button { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); }
+        button:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .btn-danger { background: #dc3545; }
+        .btn-small { padding: 6px 12px; font-size: 12px; }
+        .alert { padding: 15px; border-radius: 6px; margin-bottom: 15px; display: none; }
+        .alert.success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .alert.error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .alert.show { display: block; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .response-box { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 6px; margin-top: 15px; font-family: 'Courier New', monospace; font-size: 13px; max-height: 400px; overflow-y: auto; display: none; }
+        .response-box.show { display: block; }
+        .response-box pre { margin: 0; white-space: pre-wrap; word-wrap: break-word; }
+        .token-display { background: #fff3cd; border: 1px solid #ffc107; padding: 10px; border-radius: 6px; margin: 10px 0; word-break: break-all; font-family: monospace; font-size: 12px; }
+        .item { background: white; padding: 15px; margin-bottom: 10px; border-radius: 6px; border-left: 3px solid #667eea; }
+        .item p { margin: 5px 0; font-size: 13px; }
+        .inline-buttons { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+        .qr-code { text-align: center; margin: 20px 0; }
+        .qr-code img { max-width: 300px; border: 2px solid #667eea; border-radius: 8px; padding: 10px; background: white; }
+        small { color: #666; font-size: 12px; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0; }
+        .stat-card { background: white; padding: 15px; border-radius: 8px; text-align: center; border: 2px solid #667eea; }
+        .stat-value { font-size: 2em; font-weight: 700; color: #667eea; }
+        .stat-label { font-size: 12px; color: #666; margin-top: 5px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🔧 E-Services API Test Suite</h1>
+        <p>Complete Testing Interface for All Endpoints</p>
+    </div>
+
+    <div class="nav-tabs">
+        <button class="nav-tab active" onclick="switchTab('auth')">🔐 Auth</button>
+        <button class="nav-tab" onclick="switchTab('profile')">👤 Profile</button>
+        <button class="nav-tab" onclick="switchTab('2fa')">🔒 2FA</button>
+        <button class="nav-tab" onclick="switchTab('password')">🔑 Password</button>
+        <button class="nav-tab" onclick="switchTab('files')">📁 Files</button>
+        <button class="nav-tab" onclick="switchTab('role')">👥 Roles</button>
+    </div>
+
+    <div class="content">
+        <!-- AUTH TAB -->
+        <div id="auth" class="tab-content active">
+            <div class="section">
+                <h2>🔐 Authentication</h2>
+                <h3><span class="endpoint-badge badge-post">POST</span>/api/auth/login</h3>
+                <div id="loginAlert" class="alert"></div>
+                <form onsubmit="return handleLogin(event)">
+                    <div class="form-group">
+                        <label>Student ID:</label>
+                        <input type="text" id="login_studentId" value="TP012345" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password:</label>
+                        <input type="password" id="login_password" value="123456" required>
+                    </div>
+                    <button type="submit">Login</button>
+                </form>
+                <div id="loginResponse" class="response-box"></div>
+                <div id="tokenDisplay" class="token-display" style="display: none;">
+                    <strong>🎫 Access Token:</strong>
+                    <div id="tokenValue"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3><span class="endpoint-badge badge-post">POST</span>/api/auth/register</h3>
+                <div id="registerAlert" class="alert"></div>
+                <form onsubmit="return handleRegister(event)">
+                    <div class="form-group">
+                        <label>Student ID:</label>
+                        <input type="text" id="reg_studentId" placeholder="TP999999" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="reg_email" placeholder="student@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password:</label>
+                        <input type="password" id="reg_password" placeholder="Min 6 characters" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Role:</label>
+                        <select id="reg_role">
+                            <option value="ROLE_STUDENT">Student</option>
+                            <option value="ROLE_STAFF">Staff</option>
+                        </select>
+                    </div>
+                    <button type="submit">Register</button>
+                </form>
+                <div id="registerResponse" class="response-box"></div>
+            </div>
+
+            <div class="section">
+                <h3><span class="endpoint-badge badge-post">POST</span>/api/auth/refresh</h3>
+                <div id="refreshAlert" class="alert"></div>
+                <form onsubmit="return handleRefresh(event)">
+                    <div class="form-group">
+                        <label>Refresh Token:</label>
+                        <input type="text" id="refresh_token" placeholder="Enter refresh token" required>
+                    </div>
+                    <button type="submit">Refresh Access Token</button>
+                </form>
+                <div id="refreshResponse" class="response-box"></div>
+            </div>
+
+            <div class="section">
+                <h3><span class="endpoint-badge badge-post">POST</span>/api/auth/logout</h3>
+                <div id="logoutAlert" class="alert"></div>
+                <button onclick="handleLogout()">Logout</button>
+                <div id="logoutResponse" class="response-box"></div>
+            </div>
+        </div>
+
+        <!-- PROFILE TAB -->
+        <div id="profile" class="tab-content">
+            <div class="section">
+                <h2>👤 Profile Management</h2>
+                <h3><span class="endpoint-badge badge-get">GET</span>/api/profile</h3>
+                <div id="getProfileAlert" class="alert"></div>
+                <button onclick="handleGetProfile()">Get My Profile</button>
+                <div id="getProfileResponse" class="response-box"></div>
+                <div id="profileDisplay" style="display: none; margin-top: 15px; background: white; padding: 15px; border-radius: 8px;">
+                    <h4>📋 Profile Information</h4>
+                    <div id="profileInfo"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3><span class="endpoint-badge badge-put">PUT</span>/api/profile</h3>
+                <div id="updateProfileAlert" class="alert"></div>
+                <form onsubmit="return handleUpdateProfile(event)">
+                    <div class="form-group">
+                        <label>First Name:</label>
+                        <input type="text" id="profile_firstName" placeholder="John">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name:</label>
+                        <input type="text" id="profile_lastName" placeholder="Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="profile_email" placeholder="john@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number:</label>
+                        <input type="text" id="profile_phone" placeholder="+966501234567">
+                    </div>
+                    <div class="form-group">
+                        <label>Address:</label>
+                        <textarea id="profile_address" rows="2" placeholder="Riyadh, Saudi Arabia"></textarea>
+                    </div>
+                    <button type="submit">Update Profile</button>
+                </form>
+                <div id="updateProfileResponse" class="response-box"></div>
+            </div>
+
+            <div class="section">
+                <h3><span class="endpoint-badge badge-post">POST</span>/api/profile/change-password</h3>
+                <div id="changePasswordAlert" class="alert"></div>
+                <form onsubmit="return handleChangePassword(event)">
+                    <div class="form-group">
+                        <label>Current Password:</label>
+                        <input type="password" id="pwd_current" required>
+                    </div>
+                    <div class="form-group">
+                        <label>New Password:</label>
+                        <input type="password" id="pwd_new" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password:</label>
+                        <input type="password" id="pwd_confirm" required>
+                    </div>
+                    <button type="submit">Change Password</button>
+                </form>
+                <div id="changePasswordResponse" class="response-box"></div>
+            </div>
+
+            <div class="section">
+                <h3><span class="endpoint-badge badge-get">GET</span>/api/profile/login-history</h3>
+                <div id="loginHistoryAlert" class="alert"></div>
+                <button onclick="handleGetLoginHistory()">Get Login History</button>
+                <div id="loginHistoryResponse" class="response-box"></div>
+                <div id="loginHistoryDisplay" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+
+        <!-- 2FA TAB -->
+        <div id="2fa" class="tab-content">
+            <div class="section">
+                <h2>🔒 Two-Factor Authentication</h2>
+                <h3><span class="endpoint-badge badge-get">GET</span>/api/2fa/status</h3>
+                <div id="2faStatusAlert" class="alert"></div>
+                <button onclick="handleGet2FAStatus()">Check 2FA Status</button>
+                <div id="2faStatusResponse" class="response-box"></div>
+                <div id="2faStatusDisplay" style="display: none; margin-top: 15px; background: white; padding: 15px; border-radius: 8px;">
+                    <h4>🔐 2FA Status</h4>
+                    <div id="2faStatusInfo"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3><span class="endpoint-badge badge-post">POST</span>/api/2fa/email/setup</h3>
+                <div id="emailOtpSetupAlert" class="alert"></div>
+                <p><small>This will send an OTP to your registered email</small></p>
+                <button onclick="handleSetupEmailOTP()">Setup Email OTP</button>
+                <div id="emailOtpSetupResponse" class="response-box"></div>
+            </div>
+
+            <div class="section">
+                <h3><span class="endpoint-badge badge-post">POST</span>/api/2fa/email/verify</h3>
+                <div id="verifyEmailOtpAlert" class="alert"></div>
+                <form onsubmit="return handleVerifyEmailOTP(event)">
+                    <div class="form-group">
+                        <label>OTP Code (from email):</label>
+                        <input type="text" id="email_otp" placeholder="123456" required>
+                    </div>
+                    <button type="submit">Verify Email OTP</button>
+                </form>
+                <div id="verifyEmailOtpResponse" class="response-box"></div>
+            </div>
+
+            <div class="section">
+                <h3><span class="endpoint-badge badge-post">POST</span>/api/2fa/google-auth/setup</h3>
+                <div id="googleAuthSetupAlert" class="alert"></div>
+                <button onclick="handleSetupGoogleAuth()">Setup Google Authenticator</button>
+                <div id="googleAuthSetupResponse" class="response-box"></div>
+                <div id="qrCodeDisplay" class="qr-code" style="display: none;">
+                    <h4>📱 Scan QR Code</h4>
+                    <img id="qrCodeImage" src="" alt="QR Code">
+                    <p><strong>Secret:</strong> <span id="secretKey"></span></p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3><span class="endpoint-badge badge-post">POST</span>/api/2fa/google-auth/verify</h3>
+                <div id="verifyGoogleAuthAlert" class="alert"></div>
+                <form onsubmit="return handleVerifyGoogleAuth(event)">
+                    <div class="form-group">
+                        <label>6-Digit Code:</label>
+                        <input type="number" id="google_code" placeholder="123456" required>
+                    </div>
+                    <button type="submit">Verify Google Authenticator</button>
+                </form>
+                <div id="verifyGoogleAuthResponse" class="response-box"></div>
+            </div>
+
+            <div class="section">
+                <h3><span class="endpoint-badge badge-post">POST</span>/api/2fa/disable</h3>
+                <div id="disable2faAlert" class="alert"></div>
+                <button onclick="handleDisable2FA()" class="btn-danger">Disable 2FA</button>
+                <div id="disable2faResponse" class="response-box"></div>
+            </div>
+        </div>
+
+        <!-- PASSWORD TAB -->
+        <div id="password" class="tab-content">
+            <div class="section">
+                <h2>🔑 Password Reset</h2>
+                <h3><span class="endpoint-badge badge-post">POST</span>/api/auth/forgot-password</h3>
+                <div id="forgotPasswordAlert" class="alert"></div>
+                <form onsubmit="return handleForgotPassword(event)">
+                    <div class="form-group">
+                        <label>Email or Student ID:</label>
+                        <input type="text" id="forgot_emailOrStudentId" placeholder="TP012345" required>
+                    </div>
+                    <button type="submit">Request Password Reset</button>
+                </form>
+                <div id="forgotPasswordResponse" class="response-box"></div>
+            </div>
+
+            <div class="section">
+                <h3><span class="endpoint-badge badge-get">GET</span>/api/auth/validate-reset-token</h3>
+                <div id="validateTokenAlert" class="alert"></div>
+                <form onsubmit="return handleValidateToken(event)">
+                    <div class="form-group">
+                        <label>Reset Token:</label>
+                        <input type="text" id="validate_token" placeholder="Token from email" required>
+                    </div>
+                    <button type="submit">Validate Token</button>
+                </form>
+                <div id="validateTokenResponse" class="response-box"></div>
+            </div>
+
+            <div class="section">
+                <h3><span class="endpoint-badge badge-post">POST</span>/api/auth/reset-password</h3>
+                <div id="resetPasswordAlert" class="alert"></div>
+                <form onsubmit="return handleResetPassword(event)">
+                    <div class="form-group">
+                        <label>Reset Token:</label>
+                        <input type="text" id="reset_token" placeholder="Token from email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>New Password:</label>
+                        <input type="password" id="reset_newPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password:</label>
+                        <input type="password" id="reset_confirmPassword" required>
+                    </div>
+                    <button type="submit">Reset Password</button>
+                </form>
+                <div id="resetPasswordResponse" class="response-box"></div>
+            </div>
+        </div>
+
+        <!-- FILES TAB -->
+        <div id="files" class="tab-content">
+            <div class="section">
+                <h2>📁 File Management</h2>
+                <h3><span class="endpoint-badge badge-post">POST</span>/api/student/files/upload</h3>
+                <div id="uploadFileAlert" class="alert"></div>
+                <form onsubmit="return handleUploadFile(event)">
+                    <div class="form-group">
+                        <label>Select File:</label>
+                        <input type="file" id="file_upload" required>
+                        <small>Max 10MB - PDF, Images, Word, Excel</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Category:</label>
+                        <select id="file_category" required>
+                            <option value="">-- Select --</option>
+                            <option value="PASSPORT">📘 Passport</option>
+                            <option value="VISA">🛂 Visa</option>
+                            <option value="CERTIFICATE">🎓 Certificate</option>
+                            <option value="TRANSCRIPT">📊 Transcript</option>
+                            <option value="ID_CARD">🪪 ID Card</option>
+                            <option value="PHOTO">📸 Photo</option>
+                            <option value="MEDICAL">🏥 Medical</option>
+                            <option value="INSURANCE">🛡️ Insurance</option>
+                            <option value="OTHER">📄 Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Description:</label>
+                        <textarea id="file_description" rows="2"></textarea>
+                    </div>
+                    <button type="submit">Upload File</button>
+                </form>
+                <div id="uploadFileResponse" class="response-box"></div>
+            </div>
+
+            <div class="section">
+                <h3><span class="endpoint-badge badge-get">GET</span>/api/student/files</h3>
+                <div id="getFilesAlert" class="alert"></div>
+                <div class="form-group">
+                    <label>Filter:</label>
+                    <select id="files_filter">
+                        <option value="">All Categories</option>
+                        <option value="PASSPORT">Passport</option>
+                        <option value="VISA">Visa</option>
+                        <option value="CERTIFICATE">Certificate</option>
+                        <option value="TRANSCRIPT">Transcript</option>
+                        <option value="ID_CARD">ID Card</option>
+                        <option value="PHOTO">Photo</option>
+                        <option value="MEDICAL">Medical</option>
+                        <option value="INSURANCE">Insurance</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                </div>
+                <button onclick="handleGetFiles()">Get Files</button>
+                <div id="getFilesResponse" class="response-box"></div>
+                <div id="filesStatsDisplay" style="display: none; margin-top: 15px;">
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalFiles">0</div>
+                            <div class="stat-label">Total Files</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalStorage">0</div>
+                            <div class="stat-label">Storage Used</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="filesListDisplay" style="margin-top: 15px;"></div>
+            </div>
+
+            <div class="section">
+                <h3><span class="endpoint-badge badge-get">GET</span>/api/student/files/categories</h3>
+                <div id="getCategoriesAlert" class="alert"></div>
+                <button onclick="handleGetCategories()">Get Categories</button>
+                <div id="getCategoriesResponse" class="response-box"></div>
+            </div>
+        </div>
+
+        <!-- ROLES TAB -->
+        <div id="role" class="tab-content">
+            <div class="section">
+                <h2>👥 Role Testing</h2>
+                <h3><span class="endpoint-badge badge-get">GET</span>/api/student/test</h3>
+                <div id="studentTestAlert" class="alert"></div>
+                <p><small>Requires ROLE_STUDENT</small></p>
+                <button onclick="handleTestStudent()">Test Student Access</button>
+                <div id="studentTestResponse" class="response-box"></div>
+            </div>
+
+            <div class="section">
+                <h3><span class="endpoint-badge badge-get">GET</span>/api/staff/test</h3>
+                <div id="staffTestAlert" class="alert"></div>
+                <p><small>Requires ROLE_STAFF</small></p>
+                <button onclick="handleTestStaff()">Test Staff Access</button>
+                <div id="staffTestResponse" class="response-box"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let accessToken = '';
+    let refreshToken = '';
+    let currentStudentId = '';
+    const API_BASE = 'http://localhost:9090/api';
+
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabName).classList.add('active');
+        event.target.classList.add('active');
+    }
+
+    function showAlert(id, msg, type) {
+        const el = document.getElementById(id);
+        el.textContent = msg;
+        el.className = `alert ${type} show`;
+        setTimeout(() => el.classList.remove('show'), 5000);
+    }
+
+    function showResponse(id, data) {
+        const el = document.getElementById(id);
+        el.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+        el.classList.add('show');
+    }
+
+    async function apiCall(method, endpoint, body = null, auth = false) {
+        try {
+            const opts = { method, headers: { 'Content-Type': 'application/json' } };
+            if (auth && accessToken) opts.headers['Authorization'] = 'Bearer ' + accessToken;
+            if (body) opts.body = JSON.stringify(body);
+            const res = await fetch(API_BASE + endpoint, opts);
+            const data = await res.json();
+            return { success: res.ok, data, status: res.status };
+        } catch (err) {
+            return { success: false, data: { error: err.message } };
+        }
+    }
+
+    async function handleLogin(e) {
+        e.preventDefault();
+        const result = await apiCall('POST', '/auth/login', {
+            studentId: document.getElementById('login_studentId').value,
+            password: document.getElementById('login_password').value
+        });
+        if (result.success && result.data.accessToken) {
+            accessToken = result.data.accessToken;
+            refreshToken = result.data.refreshToken || '';
+            currentStudentId = result.data.studentId;
+            document.getElementById('tokenDisplay').style.display = 'block';
+            document.getElementById('tokenValue').textContent = accessToken;
+            showAlert('loginAlert', '✅ Login successful!', 'success');
+        } else {
+            showAlert('loginAlert', '❌ ' + (result.data.error || 'Login failed'), 'error');
+        }
+        showResponse('loginResponse', result.data);
+        return false;
+    }
+
+    async function handleRegister(e) {
+        e.preventDefault();
+        const result = await apiCall('POST', '/auth/register', {
+            studentId: document.getElementById('reg_studentId').value,
+            email: document.getElementById('reg_email').value,
+            password: document.getElementById('reg_password').value,
+            role: document.getElementById('reg_role').value
+        });
+        showAlert('registerAlert', result.success ? '✅ ' + result.data.message : '❌ ' + result.data.error, result.success ? 'success' : 'error');
+        showResponse('registerResponse', result.data);
+        return false;
+    }
+
+    async function handleRefresh(e) {
+        e.preventDefault();
+        const result = await apiCall('POST', '/auth/refresh', {
+            refreshToken: document.getElementById('refresh_token').value
+        });
+        if (result.success && result.data.accessToken) {
+            accessToken = result.data.accessToken;
+            showAlert('refreshAlert', '✅ Token refreshed!', 'success');
+        }
+        showResponse('refreshResponse', result.data);
+        return false;
+    }
+
+    async function handleLogout() {
+        const result = await apiCall('POST', '/auth/logout', { studentId: currentStudentId });
+        if (result.success) {
+            accessToken ='';
+            refreshToken = '';
+            currentStudentId = '';
+            document.getElementById('tokenDisplay').style.display = 'none';
+            showAlert('logoutAlert', '✅ Logged out!', 'success');
+        }
+        showResponse('logoutResponse', result.data);
+    }
+    async function handleGetProfile() {
+        const result = await apiCall('GET', '/profile', null, true);
+        if (result.success) {
+            const p = result.data;
+            document.getElementById('profileDisplay').style.display = 'block';
+            document.getElementById('profileInfo').innerHTML = `
+                <p><strong>Student ID:</strong> ${p.studentId}</p>
+                <p><strong>Email:</strong> ${p.email}</p>
+                <p><strong>Name:</strong> ${p.firstName || 'N/A'} ${p.lastName || 'N/A'}</p>
+                <p><strong>Phone:</strong> ${p.phoneNumber || 'N/A'}</p>
+                <p><strong>Address:</strong> ${p.address || 'N/A'}</p>
+                <p><strong>Role:</strong> ${p.role}</p>
+                <p><strong>2FA:</strong> ${p.twoFactorEnabled ? 'Enabled' : 'Disabled'}</p>
+            `;
+        }
+        showResponse('getProfileResponse', result.data);
+    }
+
+    async function handleUpdateProfile(e) {
+        e.preventDefault();
+        const result = await apiCall('PUT', '/profile', {
+            firstName: document.getElementById('profile_firstName').value,
+            lastName: document.getElementById('profile_lastName').value,
+            email: document.getElementById('profile_email').value,
+            phoneNumber: document.getElementById('profile_phone').value,
+            address: document.getElementById('profile_address').value
+        }, true);
+        showAlert('updateProfileAlert', result.success ? '✅ Profile updated!' : '❌ ' + result.data.error, result.success ? 'success' : 'error');
+        showResponse('updateProfileResponse', result.data);
+        return false;
+    }
+
+    async function handleChangePassword(e) {
+        e.preventDefault();
+        const result = await apiCall('POST', '/profile/change-password', {
+            currentPassword: document.getElementById('pwd_current').value,
+            newPassword: document.getElementById('pwd_new').value,
+            confirmPassword: document.getElementById('pwd_confirm').value
+        }, true);
+        showAlert('changePasswordAlert', result.success ? '✅ Password changed!' : '❌ ' + result.data.error, result.success ? 'success' : 'error');
+        showResponse('changePasswordResponse', result.data);
+        return false;
+    }
+
+    async function handleGetLoginHistory() {
+        const result = await apiCall('GET', '/profile/login-history', null, true);
+        if (result.success && Array.isArray(result.data)) {
+            document.getElementById('loginHistoryDisplay').innerHTML = result.data.map(h => `
+                <div class="item">
+                    <p><strong>IP:</strong> ${h.ipAddress}</p>
+                    <p><strong>Time:</strong> ${new Date(h.loginTime).toLocaleString()}</p>
+                    <p><strong>Status:</strong> ${h.successful ? '✅ Success' : '❌ Failed'}</p>
+                    <p><strong>Location:</strong> ${h.location}</p>
+                </div>
+            `).join('');
+        }
+        showResponse('loginHistoryResponse', result.data);
+    }
+
+    async function handleGet2FAStatus() {
+        const result = await apiCall('GET', '/2fa/status', null, true);
+        if (result.success) {
+            document.getElementById('2faStatusDisplay').style.display = 'block';
+            document.getElementById('2faStatusInfo').innerHTML = `
+                <p><strong>Enabled:</strong> ${result.data.enabled ? 'Yes' : 'No'}</p>
+                <p><strong>Method:</strong> ${result.data.method}</p>
+            `;
+        }
+        showResponse('2faStatusResponse', result.data);
+    }
+
+    async function handleSetupEmailOTP() {
+        const result = await apiCall('POST', '/2fa/email/setup', null, true);
+        showAlert('emailOtpSetupAlert', result.success ? '✅ ' + result.data.message : '❌ ' + result.data.error, result.success ? 'success' : 'error');
+        showResponse('emailOtpSetupResponse', result.data);
+    }
+
+    async function handleVerifyEmailOTP(e) {
+        e.preventDefault();
+        const result = await apiCall('POST', '/2fa/email/verify', {
+            otp: document.getElementById('email_otp').value
+        }, true);
+        showAlert('verifyEmailOtpAlert', result.success ? '✅ OTP verified!' : '❌ ' + result.data.error, result.success ? 'success' : 'error');
+        showResponse('verifyEmailOtpResponse', result.data);
+        return false;
+    }
+
+    async function handleSetupGoogleAuth() {
+        const result = await apiCall('POST', '/2fa/google-auth/setup', null, true);
+        if (result.success) {
+            document.getElementById('qrCodeDisplay').style.display = 'block';
+            document.getElementById('qrCodeImage').src = result.data.qrCodeImage;
+            document.getElementById('secretKey').textContent = result.data.secret;
+        }
+        showResponse('googleAuthSetupResponse', result.data);
+    }
+
+    async function handleVerifyGoogleAuth(e) {
+        e.preventDefault();
+        const result = await apiCall('POST', '/2fa/google-auth/verify', {
+            code: parseInt(document.getElementById('google_code').value)
+        }, true);
+        showAlert('verifyGoogleAuthAlert', result.success ? '✅ Google Auth verified!' : '❌ ' + result.data.error, result.success ? 'success' : 'error');
+        showResponse('verifyGoogleAuthResponse', result.data);
+        return false;
+    }
+
+    async function handleDisable2FA() {
+        const result = await apiCall('POST', '/2fa/disable', null, true);
+        showAlert('disable2faAlert', result.success ? '✅ 2FA disabled!' : '❌ ' + result.data.error, result.success ? 'success' : 'error');
+        showResponse('disable2faResponse', result.data);
+    }
+
+    async function handleForgotPassword(e) {
+        e.preventDefault();
+        const result = await apiCall('POST', '/auth/forgot-password', {
+            emailOrStudentId: document.getElementById('forgot_emailOrStudentId').value
+        });
+        showAlert('forgotPasswordAlert', '✅ ' + result.data.message, 'success');
+        showResponse('forgotPasswordResponse', result.data);
+        return false;
+    }
+
+    async function handleValidateToken(e) {
+        e.preventDefault();
+        const token = document.getElementById('validate_token').value;
+        const result = await fetch(API_BASE + '/auth/validate-reset-token?token=' + encodeURIComponent(token));
+        const data = await result.json();
+        showAlert('validateTokenAlert', result.ok ? '✅ Token is valid!' : '❌ ' + data.error, result.ok ? 'success' : 'error');
+        showResponse('validateTokenResponse', data);
+        return false;
+    }
+
+    async function handleResetPassword(e) {
+        e.preventDefault();
+        const result = await apiCall('POST', '/auth/reset-password', {
+            token: document.getElementById('reset_token').value,
+            newPassword: document.getElementById('reset_newPassword').value,
+            confirmPassword: document.getElementById('reset_confirmPassword').value
+        });
+        showAlert('resetPasswordAlert', result.success ? '✅ ' + result.data.message : '❌ ' + result.data.error, result.success ? 'success' : 'error');
+        showResponse('resetPasswordResponse', result.data);
+        return false;
+    }
+
+    async function handleUploadFile(e) {
+        e.preventDefault();
+        const file = document.getElementById('file_upload').files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('category', document.getElementById('file_category').value);
+        const desc = document.getElementById('file_description').value;
+        if (desc) formData.append('description', desc);
+
+        try {
+            const res = await fetch(API_BASE + '/student/files/upload', {
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + accessToken },
+                body: formData
+            });
+            const data = await res.json();
+            showAlert('uploadFileAlert', res.ok ? '✅ ' + data.message : '❌ ' + data.error, res.ok ? 'success' : 'error');
+            showResponse('uploadFileResponse', data);
+            if (res.ok) handleGetFiles();
+        } catch (err) {
+            showAlert('uploadFileAlert', '❌ ' + err.message, 'error');
+        }
+        return false;
+    }
+
+    async function handleGetFiles() {
+        const filter = document.getElementById('files_filter').value;
+        const url = filter ? '/student/files?category=' + filter : '/student/files';
+        const result = await apiCall('GET', url, null, true);
+        if (result.success) {
+            document.getElementById('filesStatsDisplay').style.display = 'block';
+            document.getElementById('totalFiles').textContent = result.data.totalFiles;
+            document.getElementById('totalStorage').textContent = result.data.totalStorageUsed;
+
+            if (result.data.files.length > 0) {
+                document.getElementById('filesListDisplay').innerHTML = result.data.files.map(f => `
+                    <div class="item">
+                        <p><strong>${f.originalFileName}</strong></p>
+                        <p>Category: ${f.category} | Size: ${f.fileSize}</p>
+                        <p>Uploaded: ${new Date(f.uploadedAt).toLocaleString()}</p>
+                        ${f.description ? '<p>Description: ' + f.description + '</p>' : ''}
+                        <div class="inline-buttons">
+                            <button class="btn-small" onclick="downloadFile(${f.id}, '${f.originalFileName}')">📥 Download</button>
+                            <button class="btn-small btn-danger" onclick="deleteFile(${f.id})">🗑️ Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                document.getElementById('filesListDisplay').innerHTML = '<p>No files found.</p>';
+            }
+        }
+        showResponse('getFilesResponse', result.data);
+    }
+
+    async function downloadFile(id, filename) {
+        try {
+            const res = await fetch(API_BASE + '/student/files/' + id + '/download', {
+                headers: { 'Authorization': 'Bearer ' + accessToken }
+            });
+            if (res.ok) {
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            }
+        } catch (err) {
+            alert('Download failed: ' + err.message);
+        }
+    }
+
+    async function deleteFile(id) {
+        if (!confirm('Delete this file?')) return;
+        const result = await apiCall('DELETE', '/student/files/' + id, null, true);
+        if (result.success) handleGetFiles();
+    }
+
+    async function handleGetCategories() {
+        const result = await apiCall('GET', '/student/files/categories', null, true);
+        showResponse('getCategoriesResponse', result.data);
+    }
+
+    async function handleTestStudent() {
+        const result = await apiCall('GET', '/student/test', null, true);
+        showAlert('studentTestAlert', result.success ? '✅ Access granted!' : '❌ Access denied!', result.success ? 'success' : 'error');
+        showResponse('studentTestResponse', result.data);
+    }
+
+    async function handleTestStaff() {
+        const result = await apiCall('GET', '/staff/test', null, true);
+        showAlert('staffTestAlert', result.success ? '✅ Access granted!' : '❌ Access denied!', result.success ? 'success' : 'error');
+        showResponse('staffTestResponse', result.data);
+    }
+</script>
+</body>
+</html>
+````
