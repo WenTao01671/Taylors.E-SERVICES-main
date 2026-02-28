@@ -231,9 +231,20 @@ function renderShell() {
   const portal = document.getElementById('portal');
   const isStaff = state.role === 'staff';
   const menu = isStaff ? staffMenu : studentMenu;
+  const sidebarHead = document.querySelector('.sidebar-head');
 
   portal.classList.toggle('student-mode', !isStaff);
   portal.classList.toggle('staff-mode', isStaff);
+
+  if (isStaff) {
+    sidebarHead.innerHTML = "<span class='brand-line'></span><div><b>Taylor's University</b><small id='portal-type'>Staff Portal</small></div>";
+  } else {
+    sidebarHead.innerHTML = `
+      <img class="student-brand-logo" src="./assets/student-brand-logo.png" alt="Taylor's University Student Portal" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+      <div class="student-brand-fallback" style="display:none;"><span class="brand-line"></span><div><b>Taylor's University</b><small>Student Portal</small></div></div>
+      <small id="portal-type" class="student-portal-type">Student Portal</small>
+    `;
+  }
 
   document.getElementById('portal-type').textContent = isStaff ? 'Staff Portal' : 'Student Portal';
   document.getElementById('portal-title').textContent = isStaff ? 'International Office Portal' : 'Student Portal';
