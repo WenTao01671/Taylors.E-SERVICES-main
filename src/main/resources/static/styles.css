@@ -793,6 +793,10 @@
 
 .student-visa-page {
   max-width: 1220px;
+  height: calc(100vh - 140px);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .student-visa-title {
@@ -818,9 +822,9 @@
   max-width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  padding: 4px;
+  padding: 2px;
   border-radius: 16px;
-  background: #e8e8ec;
+  background: #e3e3e8;
   margin-bottom: 10px;
 }
 
@@ -830,16 +834,19 @@
   border-radius: 14px;
   background: transparent;
   color: #1f2025;
-  font-size: 33px;
+  font-size: 32px;
+  line-height: 1;
   transform: scale(0.5);
   transform-origin: center center;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   cursor: pointer;
 }
 
 .student-visa-tab.active {
   background: #ffffff;
-  box-shadow: 0 0 0 1px #e4e4e8;
+  box-shadow: none;
 }
 
 .student-visa-panel {
@@ -847,6 +854,9 @@
   border: 1px solid #dddddf;
   border-radius: 18px;
   padding: 22px 28px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .student-visa-panel h3 {
