@@ -790,3 +790,198 @@
 .student-wide-card > .student-muted {
   text-align: left;
 }
+
+.student-visa-page {
+  max-width: 1220px;
+}
+
+.student-visa-title {
+  margin: 0;
+  font-size: 48px;
+  font-weight: 600;
+  transform: scale(0.44);
+  transform-origin: left center;
+  margin-left: -14px;
+}
+
+.student-visa-subtitle {
+  margin: 4px 0 16px;
+  color: #666b77;
+  font-size: 36px;
+  transform: scale(0.44);
+  transform-origin: left center;
+  margin-left: -14px;
+}
+
+.student-visa-tabs {
+  width: 520px;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 4px;
+  border-radius: 16px;
+  background: #e8e8ec;
+  margin-bottom: 10px;
+}
+
+.student-visa-tab {
+  height: 42px;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  color: #1f2025;
+  font-size: 33px;
+  transform: scale(0.5);
+  transform-origin: center center;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.student-visa-tab.active {
+  background: #ffffff;
+  box-shadow: 0 0 0 1px #e4e4e8;
+}
+
+.student-visa-panel {
+  background: #ffffff;
+  border: 1px solid #dddddf;
+  border-radius: 18px;
+  padding: 22px 28px;
+}
+
+.student-visa-panel h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.student-visa-current-stage {
+  margin: 4px 0 14px;
+  color: #656b77;
+  font-size: 34px;
+  transform: scale(0.5);
+  transform-origin: left center;
+  margin-left: -8px;
+}
+
+.student-visa-timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.student-visa-step {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.student-visa-marker {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.student-visa-step.completed .student-visa-marker {
+  color: #16a34a;
+  border: 2px solid #16a34a;
+}
+
+.student-visa-step.in-progress .student-visa-marker,
+.student-visa-step.pending .student-visa-marker {
+  color: #f59e0b;
+  border: 2px solid #f59e0b;
+}
+
+.student-visa-step-card {
+  border: 1px solid #dddddf;
+  border-radius: 18px;
+  padding: 16px 18px;
+}
+
+.student-visa-step-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.student-visa-step-head h4 {
+  margin: 0;
+  font-size: 34px;
+  transform: scale(0.5);
+  transform-origin: left center;
+  margin-left: -8px;
+}
+
+.student-visa-step-card p {
+  margin: 4px 0;
+  color: #4b4f58;
+  font-size: 32px;
+  transform: scale(0.5);
+  transform-origin: left center;
+  margin-left: -8px;
+}
+
+.student-status-pill {
+  height: 28px;
+  padding: 0 14px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.student-status-pill.completed {
+  background: #16a34a;
+}
+
+.student-status-pill.in-progress {
+  background: #f59e0b;
+}
+
+.student-status-pill.pending {
+  background: #9aa3b2;
+}
+
+.student-medical-table-wrap {
+  overflow-x: auto;
+}
+
+.student-medical-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 860px;
+}
+
+.student-medical-table th,
+.student-medical-table td {
+  text-align: left;
+  padding: 10px 10px;
+  border-bottom: 1px solid #e5e5e8;
+}
+
+.student-medical-table th {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.student-medical-table td {
+  font-size: 16px;
+  color: #23262f;
+}
+
+.student-medical-table tbody tr:last-child td {
+  border-bottom: 0;
+}

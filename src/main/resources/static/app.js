@@ -16,6 +16,7 @@ const state = {
   role: 'student',
   pendingStudentId: '',
   currentPage: 'dashboard',
+  visaTab: 'timeline',
   currentChat: 'Ahmed A.',
   chatOpen: false,
   studentChatInput: '',
@@ -390,7 +391,7 @@ function renderPage() {
       return;
     }
     if (page === 'visa') {
-      root.innerHTML = studentVisa();
+      renderStudentVisa(root);
       return;
     }
     if (page === 'documents') {
@@ -486,8 +487,126 @@ function studentDashboard() {
   `;
 }
 
+function renderStudentVisa(root) {
+  root.innerHTML = studentVisa();
+  root.querySelectorAll('[data-visa-tab]').forEach((button) => {
+    button.onclick = () => {
+      state.visaTab = button.dataset.visaTab;
+      renderStudentVisa(root);
+    };
+  });
+}
+
 function studentVisa() {
-  return '<h1 class="student-welcome">Visa & Medical Status</h1><section class="student-card student-wide-card"><p class="student-muted">Student page under development.</p></section>';
+  const isTimeline = state.visaTab === 'timeline';
+
+  return `
+    <section class="student-visa-page">
+      <h1 class="student-visa-title">Visa & Medical Status</h1>
+      <p class="student-visa-subtitle">Track your visa application and medical examination progress</p>
+
+      <div class="student-visa-tabs">
+        <button class="student-visa-tab ${isTimeline ? 'active' : ''}" data-visa-tab="timeline">Visa Process Timeline</button>
+        <button class="student-visa-tab ${!isTimeline ? 'active' : ''}" data-visa-tab="medical">Medical Report Status</button>
+      </div>
+
+      <section class="student-visa-panel">
+        ${isTimeline ? visaTimelineContent() : visaMedicalContent()}
+      </section>
+    </section>
+  `;
+}
+
+function visaTimelineContent() {
+  return `
+    <h3>Visa Application Timeline</h3>
+    <p class="student-visa-current-stage">Current Stage: EMGS Processing - Your application is being reviewed</p>
+
+    <div class="student-visa-timeline-list">
+      <article class="student-visa-step completed">
+        <div class="student-visa-marker">✓</div>
+        <div class="student-visa-step-card">
+          <div class="student-visa-step-head">
+            <h4>Application Submitted</h4>
+            <span class="student-status-pill completed">COMPLETED</span>
+          </div>
+          <p>15 Oct 2025</p>
+          <p>Officer: System</p>
+          <p>Remarks: Application received and verified</p>
+        </div>
+      </article>
+
+      <article class="student-visa-step in-progress">
+        <div class="student-visa-marker">◷</div>
+        <div class="student-visa-step-card">
+          <div class="student-visa-step-head">
+            <h4>EMGS Processing</h4>
+            <span class="student-status-pill in-progress">IN PROGRESS</span>
+          </div>
+          <p>20 Oct 2025</p>
+          <p>Officer: Officer Lim</p>
+          <p>Remarks: Documents under review at EMGS</p>
+        </div>
+      </article>
+
+      <article class="student-visa-step pending">
+        <div class="student-visa-marker">◷</div>
+        <div class="student-visa-step-card">
+          <div class="student-visa-step-head">
+            <h4>Immigration Approval</h4>
+            <span class="student-status-pill pending">PENDING</span>
+          </div>
+          <p>Pending</p>
+          <p>Officer: -</p>
+          <p>Remarks: Awaiting EMGS approval</p>
+        </div>
+      </article>
+    </div>
+  `;
+}
+
+function visaMedicalContent() {
+  return `
+    <h3>Medical Examination Records</h3>
+    <p class="student-visa-current-stage">View your medical test results and status</p>
+
+    <div class="student-medical-table-wrap">
+      <table class="student-medical-table">
+        <thead>
+          <tr>
+            <th>Report Date</th>
+            <th>Clinic Name</th>
+            <th>Test Type</th>
+            <th>Status</th>
+            <th>Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>28 Oct 2025</td>
+            <td>Taylor's Medical Centre</td>
+            <td>General Health Screening</td>
+            <td><span class="student-status-pill completed">APPROVED</span></td>
+            <td>All tests passed</td>
+          </tr>
+          <tr>
+            <td>28 Oct 2025</td>
+            <td>Taylor's Medical Centre</td>
+            <td>Chest X-Ray</td>
+            <td><span class="student-status-pill completed">APPROVED</span></td>
+            <td>Clear results</td>
+          </tr>
+          <tr>
+            <td>5 Nov 2025</td>
+            <td>Taylor's Medical Centre</td>
+            <td>Blood Test</td>
+            <td><span class="student-status-pill pending">PENDING</span></td>
+            <td>Scheduled appointment</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  `;
 }
 
 function studentDocuments() {
