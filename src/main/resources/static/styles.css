@@ -408,11 +408,13 @@
 
 .student-card h3 {
   margin: 0;
-  font-size: 30px;
+  font-size: 36px;
   font-weight: 600;
-  transform: scale(0.44);
+  line-height: 1.2;
+  transform: scale(0.42);
   transform-origin: left center;
-  margin-left: -10px;
+  margin-left: -12px;
+  white-space: nowrap;
 }
 
 .student-card .card-icon,
@@ -428,19 +430,25 @@
   justify-content: space-between;
   gap: 10px;
   margin-bottom: 8px;
+  flex-wrap: nowrap;
 }
 
 .student-label {
   color: #6f6f74;
-  font-size: 14px;
-  margin-left: 0;
+  font-size: 31px;
+  transform: scale(0.46);
+  transform-origin: left center;
+  margin-left: -8px;
   white-space: nowrap;
+  flex: 1;
 }
 
 .student-meta {
   color: #6f6f74;
-  font-size: 14px;
-  margin-left: 0;
+  font-size: 31px;
+  transform: scale(0.46);
+  transform-origin: left center;
+  margin-left: -8px;
   white-space: nowrap;
   margin-top: -2px;
 }
@@ -479,14 +487,17 @@
 .student-secondary,
 .student-primary {
   width: 100%;
-  height: 46px;
+  height: 50px;
   border-radius: 12px;
   border: 1px solid #d7d7dc;
   background: #ffffff;
-  font-size: 30px;
+  font-size: 31px;
   transform: scale(0.46);
   transform-origin: center center;
   margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .student-primary {
@@ -714,4 +725,12 @@
     height: 4px;
     width: 100%;
   }
+}
+
+.student-card > p {
+  margin: 0;
+  font-size: 31px;
+  transform: scale(0.46);
+  transform-origin: left center;
+  margin-left: -8px;
 }
